@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sguardi – Occhiale 3D di Leonard Zaharia</title>
+
+  <!-- i caratteri: Inter Tight per i testi, JetBrains Mono per le etichette -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap">
+  <link rel="stylesheet" href="css/occhiali.css">
+
+  <!-- Three.js da CDN: "three" è la libreria, "three/addons/" sono gli strumenti extra (controlli, loader...) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+
+    <!-- ===== la barra in alto ===== -->
+    <header class="barra">
+        <a class="marchio" href="#">
+            <svg viewBox="0 0 200 80" aria-hidden="true">
+                <circle cx="50" cy="44" r="28" fill="none" stroke="currentColor" stroke-width="10"/>
+                <circle cx="150" cy="44" r="28" fill="none" stroke="currentColor" stroke-width="10"/>
+                <path d="M78 40 Q100 24 122 40" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+            sguardi
+        </a>
+        <ul class="barra-link" id="barra-link">
+            <li><a href="#configura">Configura</a></li>
+            <li><a href="#prova-invito">Prova virtuale</a></li>
+        </ul>
+        <button type="button" class="bottone bottone-verde apri-prova">Provalo ora</button>
+        <!-- il tasto del menu: si vede solo su telefono e tablet (barra.js) -->
+        <button type="button" class="barra-menu" aria-label="Apri il menu" aria-expanded="false" aria-controls="barra-link">
+            <span></span><span></span>
+        </button>
+    </header>
+
+
+    <!-- ===== 1. la prima schermata ===== -->
+    <section class="hero">
+        <p class="hero-scorri">Collezione 2026 · Leonard Zaharia</p>
+
+        <!-- forme colorate che galleggiano (le muove animazioni.js) -->
+        <div class="fluttua fluttua-1" aria-hidden="true"></div>
+        <div class="fluttua fluttua-2" aria-hidden="true"></div>
+        <div class="fluttua fluttua-3" aria-hidden="true"></div>
+        <div class="fluttua fluttua-4" aria-hidden="true"></div>
+
+        <h1 class="hero-titolo">
+            <span class="riga"><span class="dividi">Guarda</span>
+                <!-- gli occhiali disegnati: le pupille seguono il mouse -->
+                <svg class="hero-occhiali" viewBox="0 0 200 80" aria-hidden="true">
+                    <circle class="lente" cx="50" cy="44" r="27"/>
+                    <circle class="lente lente-2" cx="150" cy="44" r="27"/>
+                    <circle class="pupilla" cx="50" cy="44" r="9"/>
+                    <circle class="pupilla" cx="150" cy="44" r="9"/>
+                    <path class="traccia" d="M20 44 a30 30 0 1 0 60 0 a30 30 0 1 0 -60 0"/>
+                    <path class="traccia" d="M120 44 a30 30 0 1 0 60 0 a30 30 0 1 0 -60 0"/>
+                    <path class="traccia" d="M80 40 Q100 24 120 40"/>
+                    <path class="traccia" d="M20 40 L2 30"/>
+                    <path class="traccia" d="M180 40 L198 30"/>
+                </svg>
+            </span>
+            <span class="riga"><span class="dividi">il mondo con</span></span>
+            <span class="riga"><span class="gradiente rivela">altri occhi.</span></span>
+        </h1>
+
+        <div class="hero-basso">
+            <p class="hero-testo">
+                Un occhiale progettato da Leonard Zaharia, tutto in 3D.
+                <strong>Giralo, cambia il colore di ogni parte, smontalo</strong>
+                e provalo sulla tua faccia con la telecamera.
+            </p>
+            <div class="hero-azioni">
+                <a class="bottone bottone-verde" href="#configura">Configura <span class="freccia">→</span></a>
+                <a class="bottone bottone-linea" href="#prova-invito">Provalo addosso</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ===== 2. il nastro di parole ===== -->
+    <section class="nastro" aria-hidden="true">
+        <div class="nastro-riga">
+            <div class="nastro-dentro">
+                <span class="pillola p-verde">Montatura</span>
+                <span class="pillola pillola-vuota">Lenti</span>
+                <span class="pillola p-rosa">Aste</span>
+                <span class="pillola pillola-vuota">Ponte</span>
+                <span class="pillola p-arancio">Calibro</span>
+                <span class="pillola pillola-vuota">Colori</span>
+            </div>
+        </div>
+        <div class="nastro-riga nastro-inverso">
+            <div class="nastro-dentro">
+                <span class="pillola pillola-vuota">Prova virtuale</span>
+                <span class="pillola p-viola">Su misura</span>
+                <span class="pillola pillola-vuota">Esplodi</span>
+                <span class="pillola p-azzurro">Gira in 3D</span>
+                <span class="pillola pillola-vuota">Scatta una foto</span>
+                <span class="pillola p-lime">Fatto a mano</span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ===== 3. il configuratore a capitoli ===== -->
+    <section id="configura" class="sezione">
+        <div class="sezione-testa">
+            <div>
+                <p class="etichetta">01 — Configuratore</p>
+                <h2 class="titolo-sezione rivela-righe">Ogni parte,<br>il suo colore.</h2>
+            </div>
+            <p>Tutti i colori sono in un unico blocco: passa sopra una parte e l'occhiale
+               gira da solo per mostrartela. Puoi anche girarlo tu, trascinandolo.</p>
+        </div>
+
+        <div class="storia">
+
+            <!-- il visore resta fermo mentre i capitoli scorrono -->
+            <div class="storia-palco">
+                <!-- data-scorri="pagina": la rotella fa scorrere la pagina, non zoom -->
+                <div id="visore" class="visore" data-scorri="pagina">
+                    <p class="visore-segnaposto">Caricamento del modello 3D…</p>
+                </div>
+
+                <div class="palco-alto">
+                    <span class="palco-contatore"><span class="palco-numero">00</span> / 01 · <span class="palco-capitolo">Configura</span></span>
+                    <p class="palco-nome" data-nome>Occhiale</p>
+                </div>
+                <p class="palco-suggerimento">Trascina per girare · doppio clic per raddrizzare</p>
+
+                <!-- le viste e il tasto esplodi (configuratore.js) -->
+                <div class="opzione palco-comandi">
+                    <h3 class="opzione-titolo">Vista <span class="opzione-valore" hidden>Libera</span></h3>
+                    <div class="forme">
+                        <button type="button" class="forma vista" data-vista="fronte" data-name="Fronte">Fronte</button>
+                        <button type="button" class="forma vista" data-vista="tre-quarti" data-name="Tre quarti">¾</button>
+                        <button type="button" class="forma vista" data-vista="lato" data-name="Lato">Lato</button>
+                        <button type="button" class="forma vista" data-vista="alto" data-name="Dall'alto">Alto</button>
+                        <button type="button" class="forma esplodi">Esplodi</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- i capitoli: data-vista = dove gira l'occhiale, data-tinta = colore del visore -->
+            <div class="capitoli">
+
+                <!-- tutte le scelte in un solo blocco: abbinamenti, colori di ogni parte e calibro -->
+                <article class="capitolo capitolo-colori" data-vista="tre-quarti" data-tinta="#dcf9cf" data-titolo="Configura">
+                    <p class="capitolo-num">00</p>
+                    <h3 data-nome>Occhiale</h3>
+                    <p>Parti da un abbinamento pronto, poi cambia il colore di ogni parte e la misura della lente.</p>
+                    <div class="colori">
+                        <!-- ogni riga è un .opzione: configuratore.js aggiorna il valore scelto accanto al titolo -->
+                        <div class="opzione riga-colore" data-vista-parte="tre-quarti">
+                            <h4 class="opzione-titolo">Abbinamenti <span class="opzione-valore">First</span></h4>
+                            <div class="forme">
+                                <button type="button" class="forma abbinamento selected" data-name="First"
+                                    data-montatura="Nero" data-lenti="Fumo" data-aste="Nero" data-ponte="Argento">First</button>
+                                <button type="button" class="forma abbinamento" data-name="Second"
+                                    data-montatura="Tartaruga" data-lenti="Marrone" data-aste="Tartaruga" data-ponte="Oro">Second</button>
+                                <button type="button" class="forma abbinamento" data-name="Third"
+                                    data-montatura="Blu notte" data-lenti="Blu" data-aste="Argento" data-ponte="Canna di fucile">Third</button>
+                            </div>
+                        </div>
+
+                        <div class="opzione riga-colore" data-vista-parte="fronte">
+                            <h4 class="opzione-titolo">Montatura <span class="opzione-valore">Nero</span></h4>
+                            <div class="campioni" data-parte="montatura">
+                                <button type="button" class="campione selected" data-color="#1f1f1f" data-name="Nero" aria-label="Nero" style="background-color: #1f1f1f;"></button>
+                                <button type="button" class="campione" data-color="#6b4226" data-name="Tartaruga" aria-label="Tartaruga" style="background-color: #6b4226;"></button>
+                                <button type="button" class="campione" data-color="#c8922f" data-name="Miele" aria-label="Miele" style="background-color: #c8922f;"></button>
+                                <button type="button" class="campione" data-color="#2b3a4f" data-name="Blu notte" aria-label="Blu notte" style="background-color: #2b3a4f;"></button>
+                                <button type="button" class="campione" data-color="#b5603a" data-name="Terracotta" aria-label="Terracotta" style="background-color: #b5603a;"></button>
+                                <button type="button" class="campione" data-color="#0ae448" data-name="Verde acido" aria-label="Verde acido" style="background-color: #0ae448;"></button>
+                            </div>
+                        </div>
+
+                        <div class="opzione riga-colore" data-vista-parte="tre-quarti">
+                            <h4 class="opzione-titolo">Lenti <span class="opzione-valore">Fumo</span></h4>
+                            <div class="campioni" data-parte="lenti">
+                                <button type="button" class="campione selected" data-color="#3a3a3a" data-name="Fumo" aria-label="Fumo" style="background-color: #3a3a3a;"></button>
+                                <button type="button" class="campione" data-color="#4f5d45" data-name="Verde" aria-label="Verde" style="background-color: #4f5d45;"></button>
+                                <button type="button" class="campione" data-color="#6b4a33" data-name="Marrone" aria-label="Marrone" style="background-color: #6b4a33;"></button>
+                                <button type="button" class="campione" data-color="#3d5a80" data-name="Blu" aria-label="Blu" style="background-color: #3d5a80;"></button>
+                                <button type="button" class="campione" data-color="#c99a9a" data-name="Rosa" aria-label="Rosa" style="background-color: #c99a9a;"></button>
+                                <button type="button" class="campione" data-color="#d9b23a" data-name="Giallo" aria-label="Giallo" style="background-color: #d9b23a;"></button>
+                            </div>
+                        </div>
+
+                        <div class="opzione riga-colore" data-vista-parte="lato">
+                            <h4 class="opzione-titolo">Aste <span class="opzione-valore">Nero</span></h4>
+                            <div class="campioni" data-parte="aste">
+                                <button type="button" class="campione selected" data-color="#1f1f1f" data-name="Nero" aria-label="Nero" style="background-color: #1f1f1f;"></button>
+                                <button type="button" class="campione" data-color="#6b4226" data-name="Tartaruga" aria-label="Tartaruga" style="background-color: #6b4226;"></button>
+                                <button type="button" class="campione" data-color="#c9a54c" data-name="Oro" aria-label="Oro" style="background-color: #c9a54c;"></button>
+                                <button type="button" class="campione" data-color="#b8bcc2" data-name="Argento" aria-label="Argento" style="background-color: #b8bcc2;"></button>
+                                <button type="button" class="campione" data-color="#6b2e34" data-name="Bordeaux" aria-label="Bordeaux" style="background-color: #6b2e34;"></button>
+                                <button type="button" class="campione" data-color="#9d95ff" data-name="Lilla" aria-label="Lilla" style="background-color: #9d95ff;"></button>
+                            </div>
+                        </div>
+
+                        <div class="opzione riga-colore" data-vista-parte="alto">
+                            <h4 class="opzione-titolo">Ponte <span class="opzione-valore">Argento</span></h4>
+                            <div class="campioni" data-parte="ponte">
+                                <button type="button" class="campione" data-color="#c9a54c" data-name="Oro" aria-label="Oro" style="background-color: #c9a54c;"></button>
+                                <button type="button" class="campione selected" data-color="#b8bcc2" data-name="Argento" aria-label="Argento" style="background-color: #b8bcc2;"></button>
+                                <button type="button" class="campione" data-color="#4a4d52" data-name="Canna di fucile" aria-label="Canna di fucile" style="background-color: #4a4d52;"></button>
+                                <button type="button" class="campione" data-color="#b87333" data-name="Rame" aria-label="Rame" style="background-color: #b87333;"></button>
+                                <button type="button" class="campione" data-color="#1f1f1f" data-name="Nero" aria-label="Nero" style="background-color: #1f1f1f;"></button>
+                            </div>
+                        </div>
+
+                        <!-- il calibro: la larghezza della lente in mm (data-size); quello selezionato è la grandezza normale -->
+                        <div class="opzione riga-colore" data-vista-parte="fronte">
+                            <h4 class="opzione-titolo">Calibro <span class="opzione-valore">M · 51 mm</span></h4>
+                            <div class="misure">
+                                <button type="button" class="misura" data-size="47" data-name="S · 47 mm">S · 47</button>
+                                <button type="button" class="misura selected" data-size="51" data-name="M · 51 mm">M · 51</button>
+                                <button type="button" class="misura" data-size="55" data-name="L · 55 mm">L · 55</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- data-esplodi: arrivati qui l'occhiale si smonta da solo -->
+                <article class="capitolo" data-vista="tre-quarti" data-tinta="#e5e2ff" data-titolo="Smonta" data-esplodi>
+                    <p class="capitolo-num">01</p>
+                    <h3>Smontalo.</h3>
+                    <p>Ogni parte si allontana nella sua direzione: lenti in avanti, ponte in alto, aste di lato. Ora sai com'è fatto.</p>
+                    <div class="capitolo-azioni">
+                        <button type="button" class="bottone bottone-verde apri-prova">Provalo con la telecamera</button>
+                        <a class="bottone bottone-linea" href="#configura">Torna ai colori</a>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ===== 4. invito alla prova con la telecamera ===== -->
+    <section id="prova-invito" class="invito">
+        <div class="invito-bolla invito-bolla-1" aria-hidden="true"></div>
+        <div class="invito-bolla invito-bolla-2" aria-hidden="true"></div>
+        <h2 class="invito-titolo rivela-righe">Provalo<br><span class="gradiente">addosso.</span></h2>
+        <p>Accendi la telecamera: l'occhiale segue la tua faccia (anche quella dei tuoi amici, fino a quattro).
+           Scatta una foto e salvala sul tuo dispositivo. Nessuna immagine esce dal tuo computer.</p>
+        <button type="button" class="bottone bottone-verde apri-prova">Apri la telecamera <span class="freccia">→</span></button>
+    </section>
+
+
+    <!-- ===== 5. il piede ===== -->
+    <footer class="piede">
+        <p class="piede-marchio" aria-hidden="true">sguardi</p>
+        <div class="piede-righe">
+            <span>Occhiale 3D · Leonard Zaharia · 2026</span>
+            <span>Three.js · GSAP · MediaPipe</span>
+            <a href="#">Torna su ↑</a>
+        </div>
+    </footer>
+
+
+    <!-- ===== la prova con la telecamera: copre lo schermo, si apre con i tasti "Prova" ===== -->
+    <div id="prova" class="prova" hidden>
+        <!-- video e occhiale uno sopra l'altro, girati a specchio -->
+        <div class="prova-palco">
+            <video class="prova-video" playsinline muted></video>
+            <canvas class="prova-tela"></canvas>
+        </div>
+        <p class="prova-nome"></p>
+        <p class="prova-avviso"></p>
+        <button type="button" class="prova-chiudi">Chiudi</button>
+        <!-- scatta una foto: video + occhiale in un'unica immagine -->
+        <button type="button" class="prova-scatta" aria-label="Scatta una foto"></button>
+        <!-- l'anteprima della foto appena scattata -->
+        <div class="prova-foto" hidden>
+            <img alt="La tua foto con l'occhiale">
+            <div class="prova-foto-tasti">
+                <!-- "Salva" scarica la foto sul dispositivo (passo 10b di configuratore.js) -->
+                <a class="prova-salva" download="occhiale.png">Salva</a>
+                <button type="button" class="prova-scarta">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GSAP: la libreria delle animazioni (con ScrollTrigger per lo scroll e SplitText per dividere i titoli) -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+    <script src="js/animazioni.js"></script>
+    <script src="js/barra.js"></script>
+
+    <!-- la scena 3D e la prova con la telecamera -->
+    <script type="module" src="js/configuratore.js"></script>
+</body>
+</html>

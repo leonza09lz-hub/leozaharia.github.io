@@ -1,0 +1,1069 @@
+/* occhiali.css – l'interfaccia del sito dell'occhiale
+   Riferimento: il sito di GSAP (gsap.com): fondo nero, testo crema,
+   colori accesi, titoli enormi e tutto si muove con lo scroll. */
+
+/* ===== 1. i colori e i caratteri ===== */
+:root {
+    --nero: #0e100f;
+    --nero-2: #171a18;
+    --nero-3: #222622;
+    --linea: rgba(255, 252, 225, 0.12);
+    --crema: #fffce1;
+    --tenue: #a7a793;
+
+    --verde: #0ae448;
+    --lime: #abff84;
+    --rosa: #fec5fb;
+    --viola: #9d95ff;
+    --arancio: #ff8709;
+    --azzurro: #00bae2;
+
+    /* le tinte chiare del visore, una per capitolo */
+    --tinta-1: #fffce1;
+    --tinta-2: #dcf9cf;
+    --tinta-3: #d3f1f8;
+    --tinta-4: #fde3fb;
+    --tinta-5: #ffe6cc;
+    --tinta-6: #e5e2ff;
+
+    --font: 'Inter Tight', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --margine: clamp(16px, 4vw, 56px);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--nero);
+    color: var(--crema);
+    font-family: var(--font);
+    font-size: 18px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+}
+
+img,
+svg {
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+
+::selection {
+    background: var(--verde);
+    color: var(--nero);
+}
+
+/* piccola etichetta in carattere "da codice", come su GSAP */
+.etichetta {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--tenue);
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.etichetta::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--verde);
+}
+
+/* testo con il gradiente di colori */
+.gradiente {
+    background: linear-gradient(90deg, var(--verde), var(--azzurro) 35%, var(--viola) 65%, var(--rosa));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+
+/* ===== 2. i bottoni a pillola ===== */
+.bottone {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font: 600 16px/1 var(--font);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.25s, background-color 0.25s, color 0.25s, border-color 0.25s;
+}
+.bottone:hover {
+    transform: translateY(-2px);
+}
+.bottone-verde {
+    background: var(--verde);
+    color: var(--nero);
+}
+.bottone-verde:hover {
+    background: var(--lime);
+}
+.bottone-linea {
+    background: transparent;
+    color: var(--crema);
+    border-color: var(--linea);
+}
+.bottone-linea:hover {
+    border-color: var(--crema);
+}
+.bottone .freccia {
+    transition: transform 0.25s;
+}
+.bottone:hover .freccia {
+    transform: translateX(4px);
+}
+
+
+/* ===== 3. la barra in alto ===== */
+.barra {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px var(--margine);
+    /* fondo quasi pieno invece della sfocatura (backdrop-filter rallenta molto lo scroll) */
+    background: rgba(14, 16, 15, 0.94);
+    border-bottom: 1px solid var(--linea);
+}
+.marchio {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+}
+.marchio svg {
+    width: 42px;
+    height: auto;
+}
+.barra-link {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.barra-link a {
+    text-decoration: none;
+    font-size: 15px;
+    color: var(--tenue);
+    transition: color 0.2s;
+}
+.barra-link a:hover {
+    color: var(--crema);
+}
+.barra .bottone {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+/* il tasto del menu (due righe che diventano una X): si vede solo sotto i 900px */
+.barra-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 44px;
+    height: 44px;
+    padding: 0 11px;
+    border: 1px solid var(--linea);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+}
+.barra-menu span {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--crema);
+    transition: transform 0.25s;
+}
+.barra.aperta .barra-menu span:first-child {
+    transform: translateY(4px) rotate(45deg);
+}
+.barra.aperta .barra-menu span:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+}
+
+/* ===== 4. la prima schermata (hero) ===== */
+.hero {
+    position: relative;
+    min-height: 100svh;
+    padding: 150px var(--margine) 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+.hero-titolo {
+    position: relative;
+    z-index: 2;
+    margin: 0 0 40px 0;
+    font-size: clamp(54px, 11.5vw, 210px);
+    line-height: 0.92;
+    letter-spacing: -0.055em;
+    font-weight: 600;
+}
+.hero-titolo .riga {
+    display: block;
+}
+.hero-titolo .rivela {
+    display: inline-block;
+    padding-bottom: 0.08em; /* spazio per la "gamba" delle lettere col gradiente */
+}
+/* gli occhiali disegnati dentro il titolo, alti come le lettere */
+.hero-occhiali {
+    display: inline-block;
+    width: 1.75em;
+    height: 0.72em;
+    vertical-align: -0.02em;
+    margin: 0 0.06em;
+    overflow: visible;
+}
+.hero-occhiali .traccia {
+    fill: none;
+    stroke: var(--crema);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.hero-occhiali .lente {
+    fill: var(--verde);
+}
+.hero-occhiali .lente-2 {
+    fill: var(--viola);
+}
+.hero-occhiali .pupilla {
+    fill: var(--nero);
+}
+
+.hero-basso {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 32px;
+    align-items: end;
+}
+.hero-testo {
+    max-width: 520px;
+    margin: 0;
+    color: var(--tenue);
+    font-size: clamp(17px, 1.5vw, 21px);
+}
+.hero-testo strong {
+    color: var(--crema);
+    font-weight: 500;
+}
+.hero-azioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* le forme colorate che galleggiano dietro al titolo */
+.fluttua {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+}
+.fluttua-1 {
+    top: 18%;
+    right: 8%;
+    width: clamp(90px, 13vw, 200px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--rosa);
+}
+.fluttua-2 {
+    top: 34%;
+    right: 27%;
+    width: clamp(60px, 7vw, 110px);
+    aspect-ratio: 1;
+    border-radius: 28%;
+    background: var(--arancio);
+}
+.fluttua-3 {
+    top: 14%;
+    left: 46%;
+    width: clamp(110px, 16vw, 240px);
+    height: clamp(40px, 5vw, 76px);
+    border-radius: 999px;
+    background: var(--azzurro);
+}
+.fluttua-4 {
+    top: 26%;
+    left: 6%;
+    width: clamp(40px, 4vw, 64px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 6px solid var(--lime);
+}
+
+.hero-scorri {
+    position: absolute;
+    z-index: 2;
+    top: 112px;
+    left: var(--margine);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--tenue);
+    text-transform: uppercase;
+}
+
+
+/* ===== 5. il nastro di parole che scorre ===== */
+.nastro {
+    padding: 28px 0;
+    border-top: 1px solid var(--linea);
+    border-bottom: 1px solid var(--linea);
+    overflow: hidden;
+}
+.nastro-riga {
+    display: flex;
+    white-space: nowrap;
+}
+.nastro-riga + .nastro-riga {
+    margin-top: 14px;
+}
+.nastro-dentro {
+    display: flex;
+    flex-shrink: 0;
+    gap: 14px;
+    padding-right: 14px;
+}
+.pillola {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 28px;
+    border-radius: 999px;
+    font-size: clamp(26px, 4vw, 54px);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    color: var(--nero);
+}
+.pillola-vuota {
+    background: transparent;
+    color: var(--crema);
+    border: 1px solid var(--linea);
+}
+.p-verde { background: var(--verde); }
+.p-rosa { background: var(--rosa); }
+.p-viola { background: var(--viola); }
+.p-arancio { background: var(--arancio); }
+.p-azzurro { background: var(--azzurro); }
+.p-lime { background: var(--lime); }
+
+
+/* ===== 6. intestazione delle sezioni ===== */
+.sezione {
+    padding: clamp(80px, 12vw, 160px) var(--margine) 0;
+}
+.sezione-testa {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: end;
+    margin-bottom: clamp(40px, 6vw, 80px);
+}
+.titolo-sezione {
+    margin: 0;
+    font-size: clamp(44px, 7.5vw, 120px);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    font-weight: 600;
+}
+.sezione-testa p {
+    margin: 0;
+    color: var(--tenue);
+    max-width: 440px;
+}
+
+
+/* ===== 7. il configuratore a capitoli (visore fermo + capitoli che scorrono) ===== */
+.storia {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 64px);
+    align-items: start;
+}
+.storia-palco {
+    position: sticky;
+    top: 88px;
+    height: calc(100svh - 112px);
+}
+
+.visore {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--tinta-1);
+    border-radius: 32px;
+    overflow: hidden;
+    color: var(--nero);
+}
+.visore canvas {
+    display: block;
+}
+.visore-segnaposto,
+.visore-avviso {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: rgba(14, 16, 15, 0.5);
+    pointer-events: none;
+}
+
+/* le scritte sopra il visore */
+.palco-alto {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    pointer-events: none;
+    color: var(--nero);
+    z-index: 2;
+}
+.palco-contatore {
+    font-family: var(--mono);
+    font-size: 13px;
+    text-transform: uppercase;
+}
+.palco-nome {
+    margin: 0;
+    font-size: clamp(18px, 2vw, 26px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    text-align: right;
+}
+
+/* i comandi in basso nel visore: viste ed esplodi */
+.opzione.palco-comandi {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    max-width: none;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+.palco-comandi .opzione-titolo {
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    color: rgba(14, 16, 15, 0.6);
+    margin: 0 8px 0 8px;
+}
+.palco-comandi .forme {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 999px;
+    background: rgba(14, 16, 15, 0.08);
+}
+.palco-comandi .forma {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--nero);
+    border-color: transparent;
+    background: transparent;
+}
+.palco-comandi .forma:hover {
+    border-color: transparent;
+    background: rgba(14, 16, 15, 0.08);
+}
+.palco-comandi .forma.selected {
+    background: var(--nero);
+    color: var(--crema);
+}
+.palco-suggerimento {
+    position: absolute;
+    left: 24px;
+    bottom: 76px;
+    margin: 0;
+    font-size: 13px;
+    color: rgba(14, 16, 15, 0.5);
+    pointer-events: none;
+}
+
+/* i capitoli sulla destra */
+.capitolo {
+    min-height: 88svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6vh 0;
+    opacity: 0.3;
+    transition: opacity 0.5s;
+}
+.capitolo.attivo {
+    opacity: 1;
+}
+.capitolo:last-child {
+    min-height: 100svh;
+}
+.capitolo-num {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--verde);
+    margin: 0 0 12px 0;
+}
+.capitolo h3 {
+    margin: 0 0 16px 0;
+    font-size: clamp(40px, 5vw, 76px);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    font-weight: 600;
+}
+.capitolo > p {
+    margin: 0 0 28px 0;
+    color: var(--tenue);
+    max-width: 460px;
+}
+
+/* il riquadro con i comandi di ogni capitolo */
+.opzione {
+    background: var(--nero-2);
+    border: 1px solid var(--linea);
+    border-radius: 22px;
+    padding: 20px 22px 22px;
+    max-width: 460px;
+}
+.opzione-titolo {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 16px 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--tenue);
+}
+.opzione-valore {
+    color: var(--crema);
+    text-transform: none;
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* il blocco unico con tutti i colori: un riquadro, una riga per parte */
+.colori {
+    background: var(--nero-2);
+    border: 1px solid var(--linea);
+    border-radius: 22px;
+    padding: 4px 22px;
+    max-width: 460px;
+}
+.opzione.riga-colore {
+    max-width: none;
+    padding: 13px 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+}
+.opzione.riga-colore + .opzione.riga-colore {
+    border-top: 1px solid var(--linea);
+}
+.riga-colore .opzione-titolo {
+    margin-bottom: 12px;
+    transition: color 0.2s;
+}
+/* la riga sotto il mouse si illumina */
+.riga-colore:hover .opzione-titolo {
+    color: var(--verde);
+}
+.riga-colore .campione {
+    width: 38px;
+    height: 38px;
+}
+.riga-colore .campioni {
+    gap: 10px;
+}
+/* abbinamenti e calibro nel blocco dei colori: bottoni alti come i campioni */
+.riga-colore .forma,
+.riga-colore .misura {
+    height: 38px;
+    padding: 0 16px;
+    font-size: 14px;
+}
+.riga-colore .opzione-titolo {
+    margin-bottom: 10px;
+}
+
+/* i campioni di colore */
+.campioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.campione {
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 252, 225, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.campione:hover {
+    transform: scale(1.1);
+}
+.campione.selected {
+    outline: 2px solid var(--verde);
+    outline-offset: 4px;
+}
+
+/* i bottoni di scelta (abbinamenti, misure, viste) */
+.forme,
+.misure {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.forma,
+.misura {
+    padding: 11px 18px;
+    border: 1px solid var(--linea);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--crema);
+    font: 500 15px/1 var(--font);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.forma:hover,
+.misura:hover {
+    border-color: var(--crema);
+}
+.forma.selected,
+.misura.selected {
+    background: var(--crema);
+    border-color: var(--crema);
+    color: var(--nero);
+}
+
+/* l'ultimo capitolo: esplodi */
+.capitolo-azioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+
+/* ===== 9. invito alla prova con la telecamera ===== */
+.invito {
+    position: relative;
+    margin: clamp(80px, 12vw, 160px) var(--margine) 0;
+    padding: clamp(56px, 9vw, 120px) clamp(24px, 5vw, 72px);
+    border-radius: 40px;
+    background: var(--nero-2);
+    border: 1px solid var(--linea);
+    overflow: hidden;
+    text-align: center;
+}
+/* le bolle di colore: un gradiente che sfuma da solo, senza filter: blur (che pesa molto) */
+.invito-bolla {
+    position: absolute;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    opacity: 0.4;
+    pointer-events: none;
+}
+.invito-bolla-1 {
+    background: radial-gradient(circle, var(--verde) 0%, transparent 65%);
+    left: -25%;
+    top: -45%;
+}
+.invito-bolla-2 {
+    background: radial-gradient(circle, var(--viola) 0%, transparent 65%);
+    right: -25%;
+    bottom: -55%;
+}
+.invito-titolo {
+    position: relative;
+    margin: 0 0 24px 0;
+    font-size: clamp(48px, 9vw, 150px);
+    line-height: 0.92;
+    letter-spacing: -0.055em;
+    font-weight: 600;
+}
+.invito p {
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto 36px;
+    color: var(--tenue);
+}
+.invito .bottone {
+    position: relative;
+    font-size: 18px;
+    padding: 18px 34px;
+}
+
+
+/* ===== 10. il piede della pagina ===== */
+.piede {
+    padding: clamp(80px, 10vw, 140px) var(--margine) 32px;
+}
+.piede-marchio {
+    margin: 0;
+    font-size: clamp(80px, 24vw, 420px);
+    line-height: 0.8;
+    letter-spacing: -0.07em;
+    font-weight: 700;
+    color: var(--nero-3);
+    user-select: none;
+}
+.piede-righe {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--linea);
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--tenue);
+}
+
+
+/* ===== 11. la prova con la telecamera (schermo intero) ===== */
+.prova {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.prova[hidden] {
+    display: none;
+}
+/* specchio: muovi la testa a destra e anche l'immagine va a destra */
+.prova-palco {
+    position: relative;
+    transform: scaleX(-1);
+}
+.prova-video,
+.prova-tela {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.prova-nome {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    margin: 0;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(14, 16, 15, 0.6);
+    color: var(--crema);
+    font-weight: 600;
+}
+.prova-avviso {
+    position: absolute;
+    left: 50%;
+    bottom: 32px;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(14, 16, 15, 0.7);
+    color: var(--crema);
+    text-align: center;
+    font-size: 15px;
+}
+.prova-chiudi {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--crema);
+    color: var(--nero);
+    font: 600 14px/1 var(--font);
+    cursor: pointer;
+}
+.prova-scatta {
+    position: absolute;
+    left: 50%;
+    bottom: 84px;
+    transform: translateX(-50%);
+    width: 72px;
+    height: 72px;
+    border: 4px solid var(--crema);
+    border-radius: 50%;
+    background: var(--verde);
+    box-shadow: 0 0 0 6px rgba(10, 228, 72, 0.25);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.prova-scatta:hover {
+    transform: translateX(-50%) scale(1.08);
+}
+.prova-foto {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    width: 260px;
+    padding: 10px;
+    border-radius: 20px;
+    background: var(--nero-2);
+    border: 1px solid var(--linea);
+    color: var(--crema);
+}
+.prova-foto[hidden] {
+    display: none;
+}
+.prova-foto img {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+}
+.prova-foto-tasti {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+.prova-salva,
+.prova-scarta {
+    flex: 1;
+    padding: 10px;
+    border: 0;
+    border-radius: 999px;
+    font: 600 14px/1 var(--font);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+.prova-salva {
+    background: var(--verde);
+    color: var(--nero);
+}
+.prova-scarta {
+    background: var(--nero-3);
+    color: var(--crema);
+}
+.prova.lampo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    pointer-events: none;
+    animation: lampo 0.4s ease-out forwards;
+}
+@keyframes lampo {
+    from { opacity: 0.8; }
+    to { opacity: 0; }
+}
+
+
+/* ===== 12. tablet e telefono ===== */
+@media (max-width: 900px) {
+    /* il marchio a sinistra, bottone e menu insieme a destra */
+    .marchio {
+        margin-right: auto;
+    }
+    .barra-menu {
+        display: flex;
+    }
+    /* i link diventano una tendina sotto la barra, aperta dal tasto menu */
+    .barra-link {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 0 16px;
+        background: var(--nero);
+        border-bottom: 1px solid var(--linea);
+    }
+    .barra.aperta .barra-link {
+        display: flex;
+    }
+    .barra-link a {
+        display: block;
+        padding: 14px var(--margine);
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        color: var(--crema);
+    }
+    .hero-basso,
+    .sezione-testa {
+        grid-template-columns: 1fr;
+    }
+
+    /* il visore resta in alto, i capitoli scorrono sotto */
+    .storia {
+        grid-template-columns: 1fr;
+    }
+    .storia-palco {
+        top: 64px;
+        z-index: 5;
+        height: 46svh;
+        padding-bottom: 12px;
+        background: var(--nero);
+    }
+    .visore {
+        border-radius: 24px;
+    }
+    .capitolo {
+        min-height: 70svh;
+        padding: 40px 0;
+    }
+    .capitolo:last-child {
+        min-height: 70svh;
+    }
+    .palco-suggerimento {
+        display: none;
+    }
+    .palco-comandi .opzione-titolo {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    body {
+        font-size: 16px;
+    }
+    /* il tasto "Provalo ora" resta, solo più piccolo */
+    .barra {
+        gap: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .marchio {
+        font-size: 20px;
+    }
+    .marchio svg {
+        width: 36px;
+    }
+    .barra .bottone {
+        padding: 9px 14px;
+        font-size: 13px;
+    }
+    .barra-menu {
+        width: 40px;
+        height: 40px;
+        padding: 0 10px;
+    }
+
+    .hero {
+        padding-top: 120px;
+        padding-bottom: 40px;
+    }
+    .hero-scorri {
+        top: 84px;
+    }
+    .hero-titolo {
+        font-size: clamp(42px, 13vw, 80px);
+    }
+    /* su telefono i bottoni prendono tutta la riga: più facili da toccare */
+    .hero-azioni .bottone,
+    .capitolo-azioni .bottone {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+    .pillola {
+        padding: 8px 20px;
+    }
+    .colori {
+        padding: 4px 16px;
+    }
+    .invito {
+        border-radius: 28px;
+    }
+    .invito .bottone {
+        font-size: 16px;
+        padding: 16px 26px;
+    }
+
+    .palco-alto {
+        top: 14px;
+        left: 16px;
+        right: 16px;
+    }
+    .palco-comandi .forma {
+        padding: 7px 10px;
+        font-size: 12px;
+    }
+
+    /* la prova con la telecamera: niente sotto la "tacca" e la barra del telefono */
+    .prova-scatta {
+        bottom: calc(76px + env(safe-area-inset-bottom));
+    }
+    .prova-avviso {
+        bottom: calc(24px + env(safe-area-inset-bottom));
+        width: calc(100% - 32px);
+    }
+    .prova-foto {
+        left: 16px;
+        width: auto;
+        bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+}
+
+/* sugli schermi a tocco l'effetto "passa sopra" resterebbe acceso dopo il tocco */
+@media (hover: none) {
+    .bottone:hover {
+        transform: none;
+    }
+}
+
+/* chi preferisce meno movimento: niente transizioni decorative */
+@media (prefers-reduced-motion: reduce) {
+    .bottone,
+    .campione {
+        transition: none;
+    }
+}
